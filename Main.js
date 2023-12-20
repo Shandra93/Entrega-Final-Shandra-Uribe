@@ -17,7 +17,7 @@ function calcularPagoCuotas() {
 
     const cuotaMensual = calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres);
 
-    resultados.push(`El pago total sería: $${montoTotal.toFixed(2)}, por ${numeroCuotas} meses con un interes del ${tasaInteres}%`);
+    resultados.push(`El pago mensual sería: $${cuotaMensual.toFixed(2)}, por ${numeroCuotas} meses con un interes anual del ${tasaInteres}%`);
     console.log(resultados);
 
     resultadoDiv.innerHTML = resultados.join('<br>');
