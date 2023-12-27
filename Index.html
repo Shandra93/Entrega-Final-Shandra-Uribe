@@ -12,21 +12,27 @@
         <h1>Calculadora de Pagos Mensuales</h1>
 
         <form id="calculatorForm" class="formulario">
-            <label for="montoTotal">Monto Total:</label>
-            <input type="text" id="montoTotal" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el monto total" required>
+            <div class="form-group">
+                <label for="montoTotal">Monto Total:</label>
+                <input type="text" id="montoTotal" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el monto total" required>
+            </div>
 
-            <label for="numeroCuotas">Número de Cuotas:</label>
-            <input type="text" id="numeroCuotas" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el número de cuotas" required>
+            <div class="form-group">
+                <label for="numeroCuotas">Número de Cuotas:</label>
+                <input type="text" id="numeroCuotas" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el número de cuotas" required>
+            </div>
 
-            <label for="tasaInteres">Tasa de Interés Anual (%):</label>
-            <input type="text" id="tasaInteres" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese la tasa de interés" required>
+            <div class="form-group">
+                <label for="tasaInteres">Tasa de Interés Anual (%):</label>
+                <input type="text" id="tasaInteres" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese la tasa de interés" required>
+            </div>
 
             <button type="button" id="calcularButton">Calcular</button>
         </form>
 
         <div id="resultado" class="resultado">
-            <span id="cuotaMensual"></span>
-            <span id="detallePago"></span>
+            <p id="cuotaMensual"><strong>Cuota Mensual:</strong> $<span></span></p>
+            <p id="detallePago"><strong>Detalle de Pago:</strong> <span></span></p>
         </div>
     </div>
 

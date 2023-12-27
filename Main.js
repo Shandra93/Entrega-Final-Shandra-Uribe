@@ -5,58 +5,61 @@ const resultados = {
     cuotaMensual: 0,
 };
 
-function calcularPagoCuotas() {
-    const montoTotalInput = document.getElementById('montoTotal');
-    const numeroCuotasInput = document.getElementById('numeroCuotas');
-    const tasaInteresInput = document.getElementById('tasaInteres');
-    const resultadoDiv = document.getElementById('resultado');
+const calculadora = {
+    inputs: [],
+    init: function () {
+        this.cacheDOM();
+        this.bindEvents();
+    },
+    cacheDOM: function () {
+        this.inputs = [
+            document.getElementById('montoTotal'),
+            document.getElementById('numeroCuotas'),
+            document.getElementById('tasaInteres'),
+        ];
+        this.resultadoDiv = document.getElementById('resultado');
+        this.calcularButton = document.getElementById('calcularButton');
+    },
+    bindEvents: function () {
+        this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
+    },
+    calcularPagoCuotas: function () {
+        // se incorpora forEach como método de array para trabajar 
+        // sobre el array inputs y actualizar los valores en el objeto 
+        // resultados en la función calcularPagoCuotas
+        this.inputs.forEach((input, index) => {
+            resultados[Object.keys(resultados)[index]] = parseFloat(input.value);
+        });
 
-    resultados.montoTotal = parseFloat(montoTotalInput.value);
-    resultados.numeroCuotas = parseInt(numeroCuotasInput.value);
-    resultados.tasaInteres = parseFloat(tasaInteresInput.value);
-
-    // filtra los resultados para que se ingresen siempre cifras
-    if (
-        isNaN(resultados.montoTotal) ||
-        isNaN(resultados.numeroCuotas) ||
-        isNaN(resultados.tasaInteres) ||
-        resultados.montoTotal <= 0 ||
-        resultados.numeroCuotas <= 0 ||
-        resultados.tasaInteres <= 0
-    ) {
-        alert("Por favor, ingrese valores válidos y mayores que cero en todos los campos.");
-        return;
-    }
-
-    resultados.cuotaMensual = calcularPagoMensual(
-        resultados.montoTotal,
-        resultados.numeroCuotas,
-        resultados.tasaInteres
-    );
-
-    mostrarResultados();
-}
-
-// Función para mostrar los resultados
-function mostrarResultados() {
-    const resultadoDiv = document.getElementById('resultado');
-    resultadoDiv.innerHTML = `
-        <p>El pago mensual sería: $${resultados.cuotaMensual.toFixed(2)}, por ${
-        resultados.numeroCuotas
-    } meses con un interés anual del ${resultados.tasaInteres}%</p>
-    `;
-}
-
-// Función para calcular la cuota mensual
-function calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres) {
-    const interesMensual = tasaInteres / 100 / 12;
-    const cuotaMensual =
-        (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
-    return cuotaMensual;
-}
+        if (this.isValidInput()) {
+            resultados.cuotaMensual = this.calcularPagoMensual(
+                resultados.montoTotal,
+                resultados.numeroCuotas,
+                resultados.tasaInteres
+            );
+            this.mostrarResultados();
+        } else {
+            alert("Por favor, ingrese valores válidos y mayores que cero en todos los campos.");
+        }
+    },
+    isValidInput: function () {
+        return this.inputs.every(input => !isNaN(parseFloat(input.value)) && parseFloat(input.value) > 0);
+    },
+    mostrarResultados: function () {
+        this.resultadoDiv.innerHTML = `
+            <p>El pago mensual sería: $${resultados.cuotaMensual.toFixed(2)}, por ${
+            resultados.numeroCuotas
+        } meses con un interés anual del ${resultados.tasaInteres}%</p>
+        `;
+    },
+    calcularPagoMensual: function (montoTotal, numeroCuotas, tasaInteres) {
+        const interesMensual = tasaInteres / 100 / 12;
+        const cuotaMensual =
+            (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
+        return cuotaMensual;
+    },
+};
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Agrega un event listener al botón de calcular
-    const calcularButton = document.getElementById('calcularButton');
-    calcularButton.addEventListener('click', calcularPagoCuotas);
+    calculadora.init();
 });
