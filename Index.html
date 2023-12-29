@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Pagos Mensuales</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Incluir la biblioteca money.js -->
+    <script src="https://cdn.jsdelivr.net/npm/money@0.2.0/money.min.js"></script>
 </head>
 <body>
 
@@ -12,27 +14,28 @@
         <h1>Calculadora de Pagos Mensuales</h1>
 
         <form id="calculatorForm" class="formulario">
-            <div class="form-group">
-                <label for="montoTotal">Monto Total:</label>
-                <input type="text" id="montoTotal" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el monto total" required>
-            </div>
+            <label for="montoTotal">Monto Total:</label>
+            <input type="text" id="montoTotal" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el monto total" required>
 
-            <div class="form-group">
-                <label for="numeroCuotas">Número de Cuotas:</label>
-                <input type="text" id="numeroCuotas" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el número de cuotas" required>
-            </div>
+            <label for="numeroCuotas">Número de Cuotas:</label>
+            <input type="text" id="numeroCuotas" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el número de cuotas" required>
 
-            <div class="form-group">
-                <label for="tasaInteres">Tasa de Interés Anual (%):</label>
-                <input type="text" id="tasaInteres" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese la tasa de interés" required>
-            </div>
+            <label for="tasaInteres">Tasa de Interés Anual (%):</label>
+            <input type="text" id="tasaInteres" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese la tasa de interés" required>
+
+            <label for="moneda">Seleccione la Moneda:</label>
+            <select id="moneda">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+            </select>
 
             <button type="button" id="calcularButton">Calcular</button>
         </form>
 
         <div id="resultado" class="resultado">
-            <p id="cuotaMensual"><strong>Cuota Mensual:</strong> $<span></span></p>
-            <p id="detallePago"><strong>Detalle de Pago:</strong> <span></span></p>
+            <span id="cuotaMensual"></span>
+            <span id="detallePago"></span>
         </div>
     </div>
 

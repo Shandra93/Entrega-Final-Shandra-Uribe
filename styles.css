@@ -12,8 +12,10 @@ body {
 .container {
     background-color: #fff;
     padding: 20px;
-    border-radius: 40px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
 }
 
 h1 {
@@ -24,7 +26,6 @@ h1 {
 .formulario {
     display: flex;
     flex-direction: column;
-    max-width: 300px;
     margin: 0 auto;
 }
 
@@ -34,27 +35,36 @@ label {
 }
 
 input {
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
+#calcularButton {
+    margin-top: 1rem;
+}
+
+#moneda {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
 button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 10px;
+    background-image: linear-gradient(to top, #09ff00 10%, #fdfdfd 80%);
+    padding: 12px;
+    font-weight: 700;
+    font-size: 1rem;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-image: linear-gradient(to top, #ff0000 20%, #ff7b00 100%);
 }
 
 .resultado {
-    margin-top: 5px;
     text-align: center;
     margin-top: 20px;
     font-weight: bold;
