@@ -40,7 +40,6 @@ const calculadora = {
         }
 
         const sonTodosNumericos = this.inputs.every(input => !isNaN(parseFloat(input.value)));
-
         if (!sonTodosNumericos) {
             alert('Por favor, ingrese valores numéricos en todos los campos.');
             return;
@@ -55,6 +54,7 @@ const calculadora = {
 
     mostrarResultados() {
         const monedaSeleccionada = this.monedaSelector.value;
+        
         const cuotaMensual = this.calcularPagoMensual(
             resultados.montoTotal,
             resultados.numeroCuotas,
@@ -62,32 +62,10 @@ const calculadora = {
             monedaSeleccionada
         );
 
-        const cuotaMensualUSD = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            'USD'
-        );
-        const cuotaMensualEUR = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            'EUR'
-        );
-        const cuotaMensualGBP = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            'GBP'
-        );
-
         this.resultadoDiv.innerHTML = `
             <p>El pago mensual sería en ${monedaSeleccionada}:
                 <br>
-                ${cuotaMensual.toFixed(2)} (${monedaSeleccionada}),
-                ${fx(cuotaMensual).from(monedaSeleccionada).to('USD').toFixed(2)} (USD),
-                ${fx(cuotaMensual).from(monedaSeleccionada).to('EUR').toFixed(2)} (EUR),
-                ${fx(cuotaMensual).from(monedaSeleccionada).to('GBP').toFixed(2)} (GBP)
+                ${cuotaMensual.toFixed(2)} (${monedaSeleccionada})
             </p>
             <p>Por ${resultados.numeroCuotas} meses con un interés anual del ${resultados.tasaInteres}%</p>
         `;
@@ -105,7 +83,6 @@ const calculadora = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Configuración de la biblioteca Money.js
     fx.settings = { from: 'USD', to: 'EUR' };
     fx.base = 'USD';
     fx.rates = { EUR: 0.85, GBP: 0.73 };
