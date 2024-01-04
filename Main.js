@@ -1,6 +1,3 @@
-
-// Objeto que almacenará los resultados de los cálculos
-
 const resultados = {
     montoTotal: 0,
     numeroCuotas: 0,
@@ -8,13 +5,9 @@ const resultados = {
     cuotaMensual: 0,
 };
 
-// Objeto que proporciona métodos para mostrar mensajes en la interfaz
-
 const UI = {
     mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
 };
-
-// Objeto principal que contiene la lógica de la calculadora
 
 const calculadora = {
     inputs: [],
@@ -22,14 +15,10 @@ const calculadora = {
     calcularButton: null,
     monedaSelector: null,
 
-// Método de inicialización de la calculadora
-
     init() {
         this.cacheDOM();
         this.bindEvents();
     },
-
-// Captura las referencias a los elementos del DOM
 
     cacheDOM() {
         this.inputs = ['montoTotal', 'numeroCuotas', 'tasaInteres'].map(id => document.getElementById(id));
@@ -38,13 +27,9 @@ const calculadora = {
         this.monedaSelector = document.getElementById('moneda');
     },
 
-// Vincula el evento de clic en el botón de cálculo con la función correspondiente
-
     bindEvents() {
         this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
     },
-
-// Función que se ejecuta al hacer clic en el botón de cálculo
 
     calcularPagoCuotas() {
         const inputsConValor = this.inputs.filter(input => input.value.trim() !== '');
@@ -68,7 +53,6 @@ const calculadora = {
         this.mostrarResultados();
     },
 
-// Muestra los resultados en la interfaz en diferentes monedas
     mostrarResultados() {
         const monedaSeleccionada = this.monedaSelector.value;
         const cuotaMensual = this.calcularPagoMensual(
@@ -97,7 +81,6 @@ const calculadora = {
             'GBP'
         );
 
-        // Muestra los resultados en el elemento de resultados en la interfaz
         this.resultadoDiv.innerHTML = `
             <p>El pago mensual sería en ${monedaSeleccionada}:
                 <br>
