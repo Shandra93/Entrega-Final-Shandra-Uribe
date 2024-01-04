@@ -32,9 +32,9 @@ const calculadora = {
     },
 
     calcularPagoCuotas() {
-        const inputsConValor = this.inputs.filter(input => input.value.trim() !== '');
+        const inputsConValor = this.inputs.every(input => input.value.trim() !== '');
 
-        if (inputsConValor.length !== this.inputs.length) {
+        if (!inputsConValor) {
             alert('Por favor, complete todos los campos antes de calcular.');
             return;
         }
@@ -54,42 +54,13 @@ const calculadora = {
     },
 
     mostrarResultados() {
+        const { montoTotal, numeroCuotas, tasaInteres } = resultados;
         const monedaSeleccionada = this.monedaSelector.value;
-        const cuotaMensual = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            monedaSeleccionada
-        );
-
-        const cuotaMensualUSD = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            'USD'
-        );
-        const cuotaMensualEUR = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            'EUR'
-        );
-        const cuotaMensualGBP = this.calcularPagoMensual(
-            resultados.montoTotal,
-            resultados.numeroCuotas,
-            resultados.tasaInteres,
-            'GBP'
-        );
+        const cuotaMensual = this.calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, monedaSeleccionada);
 
         this.resultadoDiv.innerHTML = `
-            <p>El pago mensual sería en ${monedaSeleccionada}:
-                <br>
-                ${cuotaMensual.toFixed(2)} (${monedaSeleccionada}),
-                ${fx(cuotaMensual).from(monedaSeleccionada).to('USD').toFixed(2)} (USD),
-                ${fx(cuotaMensual).from(monedaSeleccionada).to('EUR').toFixed(2)} (EUR),
-                ${fx(cuotaMensual).from(monedaSeleccionada).to('GBP').toFixed(2)} (GBP)
-            </p>
-            <p>Por ${resultados.numeroCuotas} meses con un interés anual del ${resultados.tasaInteres}%</p>
+            <p>El pago mensual sería en ${monedaSeleccionada}: ${cuotaMensual.toFixed(2)}</p>
+            <p>Por ${numeroCuotas} meses con un interés anual del ${tasaInteres}%</p>
         `;
 
         UI.mostrarMensaje('Resultados calculados con éxito.');

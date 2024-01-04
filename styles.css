@@ -50,6 +50,12 @@ input {
     font-weight: 700;
 }
 
+#tasaInteres {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
 #frecuenciaPago {
     font-size: 1rem;
     font-weight: 700;

@@ -21,9 +21,13 @@
             <input type="text" id="numeroCuotas" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el número de cuotas" required>
 
             <label for="tasaInteres">Tasa de Interés Anual (%):</label>
-            <input type="text" id="tasaInteres" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese la tasa de interés" required>
+            <select id="tasaInteres">
+                <option value="10">10%</option>
+                <option value="12">12%</option>
+                <option value="15">15%</option>
+            </select>
 
-            <label for="moneda">Seleccione la Moneda:</label>
+            <label for="moneda">Seleccione la Moneda para Pagar:</label>
             <select id="moneda">
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
