@@ -50,6 +50,11 @@ input {
     font-weight: 700;
 }
 
+#frecuenciaPago {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
 button {
     background-image: linear-gradient(to top, #09ff00 10%, #fdfdfd 80%);
     padding: 12px;
