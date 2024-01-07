@@ -5,6 +5,10 @@ const resultados = {
     cuotaMensual: 0,
 };
 
+const configuracionPredeterminada = {
+    monedaDefault: 'USD',
+};
+
 const UI = {
     mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
 };
@@ -18,6 +22,7 @@ const calculadora = {
     init() {
         this.cacheDOM();
         this.bindEvents();
+        this.cargarConfiguracion();
     },
 
     cacheDOM() {
@@ -29,6 +34,11 @@ const calculadora = {
 
     bindEvents() {
         this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
+    },
+
+    cargarConfiguracion() {
+        const configuracionInicial = { ...configuracionPredeterminada, ...JSON.parse(localStorage.getItem('configuracion')) };
+        this.monedaSelector.value = configuracionInicial.monedaDefault;
     },
 
     calcularPagoCuotas() {
@@ -64,12 +74,16 @@ const calculadora = {
         `;
 
         UI.mostrarMensaje('Resultados calculados con éxito.');
+
+        // Almacenar la configuración en localStorage
+        const configuracionActualizada = { monedaDefault: monedaSeleccionada };
+        localStorage.setItem('configuracion', JSON.stringify(configuracionActualizada));
+        console.log(`${configuracionActualizada}, Datos guardados `);
     },
 
     calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, moneda) {
         const interesMensual = tasaInteres / 100 / 12;
-        const cuotaMensual =
-            (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
+        const cuotaMensual = (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
 
         return moneda === 'USD' ? cuotaMensual : fx(cuotaMensual).from('USD').to(moneda);
     },
