@@ -6,7 +6,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 50rem;
+}
+
+:root {
+    --primary-color: #09ff00;
+    --secondary-color: #ff0000;
+    --button-hover-color: #ff7b00;
 }
 
 .container {
@@ -39,30 +45,11 @@ input {
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-}
-
-#calcularButton {
-    margin-top: 1rem;
-}
-
-#moneda {
     font-size: 1rem;
-    font-weight: 700;
 }
 
-#tasaInteres {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-#frecuenciaPago {
-    font-size: 1rem;
-    font-weight: 700;
-}
-
+select,
 button {
-    background-image: linear-gradient(to top, #09ff00 10%, #fdfdfd 80%);
     padding: 12px;
     font-weight: 700;
     font-size: 1rem;
@@ -71,8 +58,13 @@ button {
     cursor: pointer;
 }
 
+button {
+    background-image: linear-gradient(to top, var(--primary-color) 10%, #fdfdfd 80%);
+    transition: background-image 0.3s ease;
+}
+
 button:hover {
-    background-image: linear-gradient(to top, #ff0000 20%, #ff7b00 100%);
+    background-image: linear-gradient(to top, var(--secondary-color) 20%, var(--button-hover-color) 100%);
 }
 
 .resultado {

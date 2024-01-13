@@ -9,16 +9,29 @@
     <script src="https://cdn.jsdelivr.net/npm/money@0.2.0/money.min.js"></script>
 </head>
 <body>
-
     <div class="container">
         <h1>Calculadora de Pagos Mensuales</h1>
-
         <form id="calculatorForm" class="formulario">
+
+            <label for="producto">Seleccione el Producto:</label>
+            <select id="producto">
+                <option value="producto1">Producto 1</option>
+                <option value="producto2">Producto 2</option>
+                <option value="producto3">Producto 3</option>
+                <option value="producto4">Producto 4</option>
+                <option value="Otro Producto">Otro - Ingrese el monto total</option>
+            </select>
+
             <label for="montoTotal">Monto Total:</label>
             <input type="text" id="montoTotal" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el monto total" required>
 
             <label for="numeroCuotas">Número de Cuotas:</label>
-            <input type="text" id="numeroCuotas" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el número de cuotas" required>
+            <select id="numeroCuotas">
+                <option value="3">3 Cuotas</option>
+                <option value="6">6 Cuotas</option>
+                <option value="9">9 Cuotas</option>
+                <option value="12">12 Cuotas</option>
+            </select>
 
             <label for="tasaInteres">Tasa de Interés Anual (%):</label>
             <select id="tasaInteres">
@@ -33,6 +46,8 @@
                 <option value="EUR">EUR</option>
                 <option value="GBP">GBP</option>
             </select>
+
+            
 
             <button type="button" id="calcularButton">Calcular</button>
         </form>
