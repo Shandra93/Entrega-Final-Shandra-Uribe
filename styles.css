@@ -6,7 +6,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50rem;
+    min-height: 100vh; /* Asegura que el cuerpo ocupe al menos el 100% de la altura de la ventana */
 }
 
 :root {
@@ -20,8 +20,9 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
     max-width: 400px;
+    width: 100%;
+    box-sizing: border-box; /* Evita que el padding afecte el ancho total */
 }
 
 h1 {
@@ -40,7 +41,9 @@ label {
     color: #555;
 }
 
-input {
+input,
+select,
+button {
     padding: 10px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
@@ -50,26 +53,27 @@ input {
 
 select,
 button {
-    padding: 12px;
     font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
 }
 
 button {
     background-image: linear-gradient(to top, var(--primary-color) 10%, #fdfdfd 80%);
     transition: background-image 0.3s ease;
+    width: 100%;
 }
 
 button:hover {
     background-image: linear-gradient(to top, var(--secondary-color) 20%, var(--button-hover-color) 100%);
+    color: #fff;
+
 }
 
-.resultado {
-    text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
-    color: #333;
+#limpiarCacheButton {
+    background-color: #dc3545; 
+}
+
+#limpiarCacheButton:hover {
+    background-color: #bd2130; 
+    color: #fff; 
 }

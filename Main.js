@@ -3,7 +3,7 @@ const resultados = {
     numeroCuotas: 0,
     tasaInteres: 0,
     cuotaMensual: 0,
-    producto: '', // Nuevo campo para el producto
+    producto: '', 
 };
 
 const configuracionPredeterminada = {
@@ -19,12 +19,14 @@ const calculadora = {
     resultadoDiv: null,
     calcularButton: null,
     monedaSelector: null,
-    productoSelector: null, // Nuevo campo para el producto
+    productoSelector: null, 
+    registros: [], 
 
     init() {
         this.cacheDOM();
         this.bindEvents();
         this.cargarConfiguracion();
+        this.cargarRegistros();
     },
 
     cacheDOM() {
@@ -37,9 +39,13 @@ const calculadora = {
 
     bindEvents() {
         this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
-
-        // Agregar evento de cambio al selector de productos
         this.productoSelector.addEventListener('change', this.actualizarMontoTotal.bind(this));
+
+        // Agregar evento al botón para limpiar el caché local
+        const limpiarCacheButton = document.getElementById('limpiarCacheButton');
+        if (limpiarCacheButton) {
+            limpiarCacheButton.addEventListener('click', this.limpiarCacheLocal.bind(this));
+        }
     },
 
     cargarConfiguracion() {
@@ -47,6 +53,18 @@ const calculadora = {
         this.monedaSelector.value = configuracionInicial.monedaDefault;
         this.productoSelector.value = ''; // Valor predeterminado para el producto
         this.actualizarMontoTotal(); // Actualizar el montoTotal al cargar la configuración inicial
+    },
+
+    cargarRegistros() {
+        const registrosGuardados = JSON.parse(localStorage.getItem('registros')) || [];
+        this.registros = registrosGuardados;
+        console.log('Registros cargados:', this.registros);
+    },
+
+    guardarRegistro() {
+        this.registros.push({ ...resultados, fecha: new Date() });
+        localStorage.setItem('registros', JSON.stringify(this.registros));
+        console.log('Registro guardado con éxito:', resultados);
     },
 
     calcularPagoCuotas() {
@@ -64,7 +82,6 @@ const calculadora = {
             return;
         }
 
-        // Nuevo campo para el producto
         resultados.producto = this.productoSelector.value;
 
         this.inputs.forEach((input, index) => {
@@ -72,6 +89,7 @@ const calculadora = {
         });
 
         this.mostrarResultados();
+        this.guardarRegistro(); // Guardar el resultado como registro
     },
 
     mostrarResultados() {
@@ -102,24 +120,29 @@ const calculadora = {
     actualizarMontoTotal() {
         const productoSeleccionado = this.productoSelector.value;
 
-        // Lógica para actualizar el montoTotal según el producto seleccionado
         switch (productoSeleccionado) {
             case 'producto1':
-                this.inputs[0].value = '1000'; // Coloca el valor deseado para producto1
+                this.inputs[0].value = '1000'; 
                 break;
             case 'producto2':
-                this.inputs[0].value = '1500'; // Coloca el valor deseado para producto2
+                this.inputs[0].value = '1500'; 
                 break;
             case 'producto3':
-                this.inputs[0].value = '2000'; // Coloca el valor deseado para producto3
+                this.inputs[0].value = '2000'; 
                 break;
             case 'producto4':
-                this.inputs[0].value = '2500'; // Coloca el valor deseado para producto4
+                this.inputs[0].value = '2500'; 
                 break;
             default:
-                this.inputs[0].value = '0'; // Coloca un valor predeterminado o ajusta según sea necesario
+                this.inputs[0].value = '0'; 
                 break;
         }
+    },
+
+    limpiarCacheLocal() {
+        localStorage.clear();
+        this.registros = []; // Limpiar registros en la memoria
+        UI.mostrarMensaje('Caché local limpiado con éxito.');
     },
 };
 
