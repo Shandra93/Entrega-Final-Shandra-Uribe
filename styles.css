@@ -4,76 +4,131 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh; /* Asegura que el cuerpo ocupe al menos el 100% de la altura de la ventana */
+    min-height: 100vh;
 }
 
 :root {
-    --primary-color: #09ff00;
+    --primary-color: #362dbb;
     --secondary-color: #ff0000;
     --button-hover-color: #ff7b00;
 }
 
-.container {
+#encabezado {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#encabezado h1 {
+    color: var(--primary-color);
+}
+
+#encabezado p {
+    color: #555;
+}
+
+#container {
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+
+#catalogoProductos,
+#calculadora {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
-    box-sizing: border-box; /* Evita que el padding afecte el ancho total */
+    box-sizing: border-box;
+    margin: 0 10px;
 }
 
-h1 {
-    text-align: center;
-    color: #333;
+#calculadora {
+    position: sticky;
+    top: 20px;
+    height: 100%;
 }
 
-.formulario {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
+#calculadora button {
+    background-color: var(--primary-color);
+    color: #fff;
+    transition: background-color 0.3s ease;
+    width: 100%;
 }
 
-label {
-    margin-bottom: 8px;
-    color: #555;
+#calculadora button:hover {
+    background-color: var(--secondary-color);
 }
 
-input,
-select,
-button {
+#calculadora input,
+#calculadora select,
+#calculadora button {
     padding: 10px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
-}
-
-select,
-button {
-    font-weight: 700;
-    cursor: pointer;
-}
-
-button {
-    background-image: linear-gradient(to top, var(--primary-color) 10%, #fdfdfd 80%);
-    transition: background-image 0.3s ease;
     width: 100%;
 }
 
-button:hover {
-    background-image: linear-gradient(to top, var(--secondary-color) 20%, var(--button-hover-color) 100%);
-    color: #fff;
+#catalogoProductos h2 {
+    text-align: center;
+    color: #333;
+}
 
+#catalogoProductos ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#catalogoProductos .producto {
+    flex: 0 0 calc(50% - 10px);
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+#catalogoProductos .producto:hover {
+    background-color: #f0f0f0;
+}
+
+#catalogoProductos img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 #limpiarCacheButton {
-    background-color: #dc3545; 
+    background-color: #dc3545;
+    margin-top: 10px;
 }
 
 #limpiarCacheButton:hover {
-    background-color: #bd2130; 
-    color: #fff; 
+    background-color: #bd2130;
+    color: #fff;
+}
+
+#resultado img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }

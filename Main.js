@@ -3,7 +3,7 @@ const resultados = {
     numeroCuotas: 0,
     tasaInteres: 0,
     cuotaMensual: 0,
-    producto: '', 
+    producto: '',
 };
 
 const configuracionPredeterminada = {
@@ -19,8 +19,23 @@ const calculadora = {
     resultadoDiv: null,
     calcularButton: null,
     monedaSelector: null,
-    productoSelector: null, 
-    registros: [], 
+    productoSelector: null,
+    registros: [],
+
+    obtenerNombreProducto(productoId) {
+        switch (productoId) {
+            case 'producto1':
+                return 'Television 55" - LG';
+            case 'producto2':
+                return 'Laptop 13" - HP';
+            case 'producto3':
+                return 'Iphone 15 Pro - Apple';
+            case 'producto4':
+                return 'MacBook Pro - Apple';
+            default:
+                return 'Producto Desconocido';
+        }
+    },
 
     init() {
         this.cacheDOM();
@@ -34,25 +49,37 @@ const calculadora = {
         this.resultadoDiv = document.getElementById('resultado');
         this.calcularButton = document.getElementById('calcularButton');
         this.monedaSelector = document.getElementById('moneda');
-        this.productoSelector = document.getElementById('producto'); // Nuevo campo para el producto
+        this.productoSelector = document.getElementById('catalogoProductos');
+
+        if (!this.productoSelector) {
+            console.error('Elemento con ID "catalogoProductos" no encontrado.'); 
+        }
     },
 
     bindEvents() {
-        this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
-        this.productoSelector.addEventListener('change', this.actualizarMontoTotal.bind(this));
+        document.addEventListener('DOMContentLoaded', () => {
+            this.actualizarMontoTotal();
+            this.cacheDOM(); 
+        });
 
-        // Agregar evento al botón para limpiar el caché local
         const limpiarCacheButton = document.getElementById('limpiarCacheButton');
         if (limpiarCacheButton) {
             limpiarCacheButton.addEventListener('click', this.limpiarCacheLocal.bind(this));
         }
+
+        const catalogoProductos = document.getElementById('catalogoProductos');
+        if (catalogoProductos) {
+            catalogoProductos.addEventListener('click', this.seleccionarProducto.bind(this));
+        }
+
+        this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
     },
 
     cargarConfiguracion() {
         const configuracionInicial = { ...configuracionPredeterminada, ...JSON.parse(localStorage.getItem('configuracion')) };
         this.monedaSelector.value = configuracionInicial.monedaDefault;
-        this.productoSelector.value = ''; // Valor predeterminado para el producto
-        this.actualizarMontoTotal(); // Actualizar el montoTotal al cargar la configuración inicial
+        this.productoSelector.value = ''; 
+        this.actualizarMontoTotal(); 
     },
 
     cargarRegistros() {
@@ -89,26 +116,46 @@ const calculadora = {
         });
 
         this.mostrarResultados();
-        this.guardarRegistro(); // Guardar el resultado como registro
+        this.guardarRegistro(); 
     },
 
     mostrarResultados() {
-        const { montoTotal, numeroCuotas, tasaInteres, producto } = resultados; // Nuevo campo para el producto
+        const { montoTotal, numeroCuotas, tasaInteres, producto } = resultados; 
         const monedaSeleccionada = this.monedaSelector.value;
         const cuotaMensual = this.calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, monedaSeleccionada);
 
+        const productoSeleccionado = this.obtenerNombreProducto(producto);
+
         this.resultadoDiv.innerHTML = `
-            <p>El pago mensual sería en ${monedaSeleccionada}: ${cuotaMensual.toFixed(2)}</p>
-            <p>Por ${numeroCuotas} meses con un interés anual del ${tasaInteres}%</p>
-            <p>Producto seleccionado: ${producto}</p>`; // Nuevo campo para el producto
+            <p>Producto seleccionado: ${productoSeleccionado}</p>
+            <p>Precio total: ${montoTotal.toFixed(2)} ${monedaSeleccionada}</p>
+            <p>El pago mensual sería de ${monedaSeleccionada}: ${cuotaMensual.toFixed(2)}</p>
+            <p>Por ${numeroCuotas} meses con un interés anual del ${tasaInteres}%</p>`;
+            
+            
 
         UI.mostrarMensaje('Resultados calculados con éxito.');
 
-        // Almacenar la configuración en localStorage
         const configuracionActualizada = { monedaDefault: monedaSeleccionada };
         localStorage.setItem('configuracion', JSON.stringify(configuracionActualizada));
         console.log(`${configuracionActualizada}, Datos guardados`);
     },
+    
+    obtenerNombreProducto(productoId) {
+        switch (productoId) {
+            case 'producto1':
+                return 'Television 55" - LG';
+            case 'producto2':
+                return 'Laptop 13" - HP';
+            case 'producto3':
+                return 'Iphone 15 Pro - Apple';
+            case 'producto4':
+                return 'MacBook Pro - Apple';
+            default:
+                return 'Producto Desconocido';
+        }
+    },
+    
 
     calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, moneda) {
         const interesMensual = tasaInteres / 100 / 12;
@@ -117,37 +164,47 @@ const calculadora = {
         return moneda === 'USD' ? cuotaMensual : fx(cuotaMensual).from('USD').to(moneda);
     },
 
+    seleccionarProducto(event) {
+        if (event.target.closest('.producto')) {
+            const productoSeleccionado = event.target.closest('.producto').dataset.producto;
+            this.productoSelector.value = productoSeleccionado;
+            this.actualizarMontoTotal();
+        }
+    },
+
     actualizarMontoTotal() {
         const productoSeleccionado = this.productoSelector.value;
+        const montoTotalInput = this.inputs[0];
 
         switch (productoSeleccionado) {
             case 'producto1':
-                this.inputs[0].value = '1000'; 
+                montoTotalInput.value = '1000';
                 break;
             case 'producto2':
-                this.inputs[0].value = '1500'; 
+                montoTotalInput.value = '1500';
                 break;
             case 'producto3':
-                this.inputs[0].value = '2000'; 
+                montoTotalInput.value = '2000';
                 break;
             case 'producto4':
-                this.inputs[0].value = '2500'; 
+                montoTotalInput.value = '2500';
                 break;
             default:
-                this.inputs[0].value = '0'; 
+                montoTotalInput.value = '0';
                 break;
         }
+
+        montoTotalInput.disabled = productoSeleccionado === '';
     },
 
     limpiarCacheLocal() {
         localStorage.clear();
-        this.registros = []; // Limpiar registros en la memoria
+        this.registros = []; 
         UI.mostrarMensaje('Caché local limpiado con éxito.');
     },
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Configuración de la biblioteca Money.js
     fx.settings = { from: 'USD', to: 'EUR' };
     fx.base = 'USD';
     fx.rates = { EUR: 0.85, GBP: 0.73 };

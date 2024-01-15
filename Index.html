@@ -1,29 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Pagos Mensuales</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Incluir la biblioteca money.js -->
+    <title>Calculadora de Pagos</title>
+    <link rel="stylesheet" href="./styles.css">
     <script src="https://cdn.jsdelivr.net/npm/money@0.2.0/money.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Calculadora de Pagos Mensuales</h1>
-        <form id="calculatorForm" class="formulario">
 
-            <label for="producto">Seleccione el Producto:</label>
-            <select id="producto">
-                <option value="producto1">Producto 1</option>
-                <option value="producto2">Producto 2</option>
-                <option value="producto3">Producto 3</option>
-                <option value="producto4">Producto 4</option>
-                <option value="Otro Producto">Otro - Ingrese el monto total</option>
+    <div id="encabezado">
+        <h1> Calcula tu pago</h1>
+        <p>Selecciona tu producto para ayudarte con el plan de pagos para tu producto</p>
+    </div>
+
+    <div id="container">
+        <div id="catalogoProductos">
+            <!-- Contenedor del catálogo de productos -->
+            <h2>Catálogo de Productos</h2>
+            <div class="producto" data-producto="producto1">
+                <img src="./Assets/coquita.jpg" alt='Television 55" - LG'>
+                <p>Television 55" - LG </p>
+            </div>
+            <div class="producto" data-producto="producto2">
+                <img src="./Assets/coquita.jpg" alt='Laptop 13" - HP'>
+                <p>Laptop 13" - HP </p>
+            </div>
+            <div class="producto" data-producto="producto3">
+                <img src="./Assets/coquita.jpg" alt='Iphone 15 Pro - Apple'>
+                <p>Iphone 15 Pro - Apple </p>
+            </div>
+            <div class="producto" data-producto="producto4">
+                <img src="./Assets/coquita.jpg" alt='MacBook Pro'>
+                <p>MacBook Pro - Apple </p>
+            </div>
+        </div>
+
+        <div id="calculadora">
+            <label for="moneda">Moneda:</label>
+            <select id="moneda">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
             </select>
 
             <label for="montoTotal">Monto Total:</label>
-            <input type="text" id="montoTotal" inputmode="numeric" pattern="[0-9]*" placeholder="Ingrese el monto total" required>
+            <input type="number" id="montoTotal" disabled>
 
             <label for="numeroCuotas">Número de Cuotas:</label>
             <select id="numeroCuotas">
@@ -31,6 +54,7 @@
                 <option value="6">6 Cuotas</option>
                 <option value="9">9 Cuotas</option>
                 <option value="12">12 Cuotas</option>
+                <option value="15">15 Cuotas</option>
             </select>
 
             <label for="tasaInteres">Tasa de Interés Anual (%):</label>
@@ -38,27 +62,15 @@
                 <option value="10">10%</option>
                 <option value="12">12%</option>
                 <option value="15">15%</option>
+                <option value="18">18%</option>
             </select>
 
-            <label for="moneda">Seleccione la Moneda para Pagar:</label>
-            <select id="moneda">
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-            </select>
-
-            <button type="button" id="calcularButton">Calcular</button>
-        </form>
-
-        <div id="resultado" class="resultado">
-            <span id="cuotaMensual"></span>
-            <span id="detallePago"></span>
+            <button id="calcularButton">Calcular</button>
+            <div id="resultado"></div>
+            <button id="limpiarCacheButton">Limpiar Caché</button>
         </div>
-
-        <button type="button" id="limpiarCacheButton">Limpiar Caché Local</button>
-
     </div>
-
+    
 
     <script src="./Main.js"></script>
 </body>
