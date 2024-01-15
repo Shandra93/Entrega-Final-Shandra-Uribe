@@ -60,6 +60,11 @@ body {
     width: 100%;
 }
 
+#carritoDeComprasText {
+    text-align: center;
+    font-size: x-large;
+}
+
 #calculadora button:hover {
     background-color: var(--secondary-color);
 }
