@@ -198,9 +198,22 @@ const calculadora = {
     },
 
     limpiarCacheLocal() {
-        localStorage.clear();
-        this.registros = []; 
-        UI.mostrarMensaje('Caché local limpiado con éxito.');
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esto eliminará todos los registros y la configuración almacenada. ¿Quieres continuar?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, limpiar caché',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear();
+                this.registros = [];
+                UI.mostrarMensaje('Caché local limpiado con éxito.');
+            }
+        });
     },
 };
 
