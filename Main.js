@@ -212,6 +212,11 @@ const calculadora = {
                 localStorage.clear();
                 this.registros = [];
                 UI.mostrarMensaje('Caché local limpiado con éxito.');
+    
+                // Agregar la siguiente línea para resetear el texto de totalCarrito
+                document.getElementById('resultado').innerHTML = '';
+    
+                // También puedes llamar a la función cargarConfiguracion() aquí si es necesario
             }
         });
     },
