@@ -51,7 +51,10 @@ body {
     max-width: none;
 }
 
-
+#catalogoProductos .producto.seleccionado {
+    background-color: #f0f0f0; 
+    border: 2px solid var(--primary-color); 
+}
 
 #catalogoProductos,
 #totalCarrito,

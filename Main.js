@@ -205,6 +205,12 @@ const calculadora = {
             const productoSeleccionado = event.target.closest('.producto').dataset.producto;
             this.productoSelector.value = productoSeleccionado;
             this.actualizarMontoTotal();
+    
+            // Agregar clase para resaltar el producto seleccionado
+            document.querySelectorAll('.producto').forEach(producto => {
+                producto.classList.remove('seleccionado');
+            });
+            event.target.closest('.producto').classList.add('seleccionado');
         }
     },
 

@@ -45,16 +45,17 @@
 
         <div id="calculadora">
             <p id="carritoDeComprasText"> Calculadora de pagos </p>
+
+            <label for="montoTotal" style="display: none;"></label>
+            <p id="montoTotal" style="display: none;"></p>
+
             <label for="moneda">Moneda:</label>
             <select id="moneda">
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
                 <option value="GBP">GBP</option>
             </select>
-
-            <label for="montoTotal" style="display: none;">Monto Total:</label>
-            <input type="number" id="montoTotal" disabled style="display: none;">
-
+            
             <label for="numeroCuotas">Número de Cuotas:</label>
             <select id="numeroCuotas">
                 <option value="3">3 Cuotas</option>
@@ -64,12 +65,11 @@
                 <option value="15">15 Cuotas</option>
             </select>
 
-            <label for="tasaInteres">Tasa de Interés Anual (%):</label>
+            <label for="tasaInteres">Método de pago:</label>
             <select id="tasaInteres">
-                <option value="10">10% Basica </option>
-                <option value="12">12% Oro </option>
-                <option value="15">15% Platinum </option>
-                <option value="18">18% Diamond </option>
+                <option value="10"> Credito </option>
+                <option value="15"> Debito </option>
+                <option value="18"> Efectivo </option>
             </select>
 
             <button id="calcularButton">Calcular</button>
