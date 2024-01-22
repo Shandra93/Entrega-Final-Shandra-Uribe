@@ -41,23 +41,10 @@ body {
     position: sticky;
     top: 20px; 
     z-index: 100;
-}
 
-#catalogoProductos {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    text-align: center;
-    max-width: none;
-}
-
-#catalogoProductos .producto.seleccionado {
-    background-color: #f0f0f0; 
-    border: 2px solid var(--primary-color); 
 }
 
 #catalogoProductos,
-#totalCarrito, 
 #calculadora {
     background-color: #fff;
     padding: 20px;
@@ -67,14 +54,6 @@ body {
     width: 100%;
     box-sizing: border-box;
     margin: 0 10px;
-    flex: 1;
-    margin: 10px;
-    max-width: 450px;
-}
-
-#totalCarrito,
-#calculadora {
-    order: 1;
 }
 
 #calculadora {
@@ -124,16 +103,14 @@ body {
     width: 100%;
 }
 
-#catalogoProductos h2,
-#totalCarrito h2 { /* Agregado totalCarrito */
+#catalogoProductos h2 {
     text-align: center;
     color: #333;
     grid-column: span 2; 
 }
 
 
-#catalogoProductos ul,
-#totalCarrito ul { /* Agregado totalCarrito */
+#catalogoProductos ul {
     list-style: none;
     padding: 0;
     display: flex;
@@ -141,8 +118,7 @@ body {
     justify-content: space-between;
 }
 
-#catalogoProductos .producto,
-#totalCarrito .producto { /* Agregado totalCarrito */
+#catalogoProductos .producto {
     flex: 0 0 calc(50% - 10px);
     box-sizing: border-box;
     cursor: pointer;
@@ -155,8 +131,7 @@ body {
     text-align: center;
 }
 
-#catalogoProductos .producto:hover,
-#totalCarrito .producto:hover { /* Agregado totalCarrito */
+#catalogoProductos .producto:hover {
     background-color: #f0f0f0;
 }
 
@@ -176,8 +151,7 @@ body {
 }
 
 
-#catalogoProductos img,
-#totalCarrito img { /* Agregado totalCarrito */
+#catalogoProductos img {
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
@@ -224,26 +198,4 @@ body {
     width: 100%;
     max-height: 100%;
     object-fit: cover;
-}
-
-#catalogoProductos .producto.seleccionado {
-    background-color: #f0f0f0;
-    border: 2px solid var(--primary-color);
-}
-
-#catalogoProductos .producto {
-    flex: 0 0 calc(50% - 16px);
-    box-sizing: border-box;
-    cursor: pointer;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    background-color: #fff;
-    transition: background-color 0.3s ease;
-    text-align: center;
-}
-
-#catalogoProductos .producto:hover {
-    background-color: #f0f0f0;
 }
