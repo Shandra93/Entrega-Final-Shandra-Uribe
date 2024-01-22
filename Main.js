@@ -1,24 +1,12 @@
-const apiKey = 'ba3657093c8beea880b8d664'; 
-
-const resultados = {
-    montoTotal: 0,
-    numeroCuotas: 0,
-    tasaInteres: 0,
-    cuotaMensual: 0,
-    producto: '',
-};
+if (typeof UI === 'undefined') {
+    var UI = {
+        mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
+    };
+}
 
 const configuracionPredeterminada = {
     monedaDefault: 'USD',
 };
-
-if (typeof UI === 'undefined') {
-    const UI = {
-        mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
-        mostrarResultados: function(cuotaMensual, montoTotal, moneda, producto, numeroCuotas, tasaInteres, carrito) {
-        },
-    };
-}
 
 if (typeof calculadora === 'undefined') {
     const calculadora = {
@@ -28,21 +16,21 @@ if (typeof calculadora === 'undefined') {
         monedaSelector: null,
         productoSelector: null,
         registros: [],
-
-    obtenerNombreProducto(productoId) {
-        switch (productoId) {
-            case 'producto1':
-                return 'Television 55" - LG';
-            case 'producto2':
-                return 'Laptop 13" - HP';
-            case 'producto3':
-                return 'Iphone 15 Pro - Apple';
-            case 'producto4':
-                return 'MacBook Pro - Apple';
-            default:
-                return 'Producto Desconocido';
-        }
-    },
+    
+        obtenerNombreProducto(productoId) {
+            switch (productoId) {
+                case 'producto1':
+                    return 'Television 55" - LG';
+                case 'producto2':
+                    return 'Laptop 13" - HP';
+                case 'producto3':
+                    return 'Iphone 15 Pro - Apple';
+                case 'producto4':
+                    return 'MacBook Pro - Apple';
+                default:
+                    return 'Producto Desconocido';
+            }
+        },
 
     mostrarAgradecimiento() {
         const principalDiv = document.getElementById('principalDiv');
@@ -75,7 +63,6 @@ if (typeof calculadora === 'undefined') {
         this.actualizarMontoTotal();
         this.mostrarCarrito();
         this.mostrarResultados();
-        this.cargarUltimoResultado();
 
         if (this.registros.length > 0) {
             this.calcularPagoCuotas();
@@ -243,13 +230,39 @@ if (typeof calculadora === 'undefined') {
         }
 
         resultados.producto = this.productoSelector.value;
+        const productoSeleccionado = productos.find(producto => producto.nombre === resultados.producto);
 
-        this.inputs.forEach((input, index) => {
-            resultados[Object.keys(resultados)[index]] = parseFloat(input.value);
-        });
+        if (productoSeleccionado) {
+            const montoTotal = parseFloat(this.inputs[0].value);
+            const numeroCuotas = parseInt(this.inputs[1].value, 10);
+            const tasaInteres = parseFloat(this.inputs[2].value);
 
-        this.mostrarResultados();
-        this.guardarRegistro(); 
+            if (productoSeleccionado.moneda !== 'USD') {
+                const conversionRate = obtenerTasaDeCambio(productoSeleccionado.moneda);
+                const montoEnMoneda = montoTotal * conversionRate;
+                this.mostrarResultadosEnInterfaz(
+                    calcularCuotaMensual(montoEnMoneda, numeroCuotas, tasaInteres),
+                    montoTotal,
+                    productoSeleccionado.moneda,
+                    resultados.producto,
+                    numeroCuotas,
+                    tasaInteres
+                );
+            } else {
+                this.mostrarResultadosEnInterfaz(
+                    calcularCuotaMensual(montoTotal, numeroCuotas, tasaInteres),
+                    montoTotal,
+                    productoSeleccionado.moneda,
+                    resultados.producto,
+                    numeroCuotas,
+                    tasaInteres
+                );
+            }
+
+            this.guardarRegistro();
+        } else {
+            alert('Producto no encontrado en el catálogo.');
+        }
     },
 
     mostrarResultados() {
@@ -261,20 +274,16 @@ if (typeof calculadora === 'undefined') {
     calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, moneda) {
         const interesMensual = tasaInteres / 100 / 12;
     
-        // Obtener la tasa de cambio de la API
         fetch(`https://open.er-api.com/v6/latest/${moneda}?apikey=${apiKey}`)
             .then(response => response.json())
             .then(data => {
                 const tasaCambio = data.rates[configuracionPredeterminada.monedaDefault];
                 const monedaSeleccionada = this.monedaSelector.value; // Corrección
     
-                // Calcular el pago mensual en la moneda predeterminada
                 const cuotaMensualUSD = (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
     
-                // Convertir a la moneda seleccionada
                 const cuotaMensual = cuotaMensualUSD * tasaCambio;
     
-                // Mostrar resultados
                 this.mostrarResultadosEnInterfaz(cuotaMensual, montoTotal, monedaSeleccionada, resultados.producto, numeroCuotas, tasaInteres); // Corrección
             })
             .catch(error => {
@@ -293,10 +302,6 @@ if (typeof calculadora === 'undefined') {
             <p>Por ${numeroCuotas} meses con un interés anual del ${tasaInteres}%</p>`;
 
         UI.mostrarMensaje('Resultados calculados con éxito.');
-
-        const configuracionActualizada = { monedaDefault: monedaSeleccionada };
-        localStorage.setItem('configuracion', JSON.stringify(configuracionActualizada));
-        console.log(`${configuracionActualizada}, Datos guardados`);
     },
 
     obtenerNombreProducto(productoId) {
@@ -384,5 +389,4 @@ if (typeof calculadora === 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
     calculadora.init();
 });
-
 }
