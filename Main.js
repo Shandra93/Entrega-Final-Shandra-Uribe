@@ -249,24 +249,10 @@ const calculadora = {
     },
 
     seleccionarProducto(event) {
-        const productoSeleccionado = event.target.closest('.producto');
-        const productos = document.querySelectorAll('.producto');
-    
-        if (productoSeleccionado) {
-            const productoId = productoSeleccionado.dataset.producto;
-    
-            productos.forEach(producto => {
-                producto.classList.remove('seleccionado');
-            });
-    
-            productoSeleccionado.classList.add('seleccionado');
-    
-            this.productoSelector.value = productoId;
+        if (event.target.closest('.producto')) {
+            const productoSeleccionado = event.target.closest('.producto').dataset.producto;
+            this.productoSelector.value = productoSeleccionado;
             this.actualizarMontoTotal();
-    
-            if (this.calcularButton) {
-                this.calcularButton.disabled = false;
-            }
         }
     },
 
