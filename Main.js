@@ -1,8 +1,10 @@
-if (typeof UI === 'undefined') {
-    var UI = {
-        mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
-    };
-}
+const resultados = {
+    montoTotal: 0,
+    numeroCuotas: 0,
+    tasaInteres: 0,
+    cuotaMensual: 0,
+    producto: '',
+};
 
 const configuracionPredeterminada = {
     monedaDefault: 'USD',
@@ -135,29 +137,10 @@ if (typeof calculadora === 'undefined') {
         const catalogoProductos = document.getElementById('catalogoProductos');
         if (catalogoProductos) {
             catalogoProductos.addEventListener('click', this.seleccionarProducto.bind(this));
-        } else {
-            console.error('Elemento con ID "catalogoProductos" no encontrado.');
         }
 
-        this.calcularButton.addEventListener('click', () => {
-            // Mostrar el div "montoTotal" al hacer clic en el botón de calcular
-            const montoTotalLabel = document.querySelector('label[for="montoTotal"]');
-            const montoTotalInput = document.getElementById('montoTotal');
-            
-            if (montoTotalLabel && montoTotalInput) {
-                montoTotalLabel.style.display = 'block';
-                montoTotalInput.style.display = 'block';
-            }
-
-            // Mostrar el div "totalCarrito" al hacer clic en el botón de calcular
-            const totalCarritoDiv = document.getElementById('totalCarrito');
-            if (totalCarritoDiv) {
-                totalCarritoDiv.style.display = 'block';
-            }
-
-            this.calcularPagoCuotas();
-        });
-    }, 
+        this.calcularButton.addEventListener('click', this.calcularPagoCuotas.bind(this));
+    },
 
     cargarConfiguracion() {
         const configuracionInicial = { ...configuracionPredeterminada, ...JSON.parse(localStorage.getItem('configuracion')) };
@@ -268,31 +251,8 @@ if (typeof calculadora === 'undefined') {
     mostrarResultados() {
         const { montoTotal, numeroCuotas, tasaInteres, producto } = resultados; 
         const monedaSeleccionada = this.monedaSelector.value;
-        this.calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, monedaSeleccionada);
-    },
-    
-    calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, moneda) {
-        const interesMensual = tasaInteres / 100 / 12;
-    
-        fetch(`https://open.er-api.com/v6/latest/${moneda}?apikey=${apiKey}`)
-            .then(response => response.json())
-            .then(data => {
-                const tasaCambio = data.rates[configuracionPredeterminada.monedaDefault];
-                const monedaSeleccionada = this.monedaSelector.value; // Corrección
-    
-                const cuotaMensualUSD = (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
-    
-                const cuotaMensual = cuotaMensualUSD * tasaCambio;
-    
-                this.mostrarResultadosEnInterfaz(cuotaMensual, montoTotal, monedaSeleccionada, resultados.producto, numeroCuotas, tasaInteres); // Corrección
-            })
-            .catch(error => {
-                console.error('Error al obtener la tasa de cambio:', error);
-            });
-    },
-    
+        const cuotaMensual = this.calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, monedaSeleccionada);
 
-    mostrarResultadosEnInterfaz(cuotaMensual, montoTotal, monedaSeleccionada, producto, numeroCuotas, tasaInteres) {
         const productoSeleccionado = this.obtenerNombreProducto(producto);
 
         this.resultadoDiv.innerHTML = `
@@ -300,10 +260,12 @@ if (typeof calculadora === 'undefined') {
             <p>Precio total: ${montoTotal.toFixed(2)} ${monedaSeleccionada}</p>
             <p>El pago mensual sería de ${monedaSeleccionada}: ${cuotaMensual.toFixed(2)}</p>
             <p>Por ${numeroCuotas} meses con un interés anual del ${tasaInteres}%</p>`;
+            
+            
 
         UI.mostrarMensaje('Resultados calculados con éxito.');
     },
-
+    
     obtenerNombreProducto(productoId) {
         switch (productoId) {
             case 'producto1':
@@ -317,6 +279,14 @@ if (typeof calculadora === 'undefined') {
             default:
                 return 'Producto Desconocido';
         }
+    },
+    
+
+    calcularPagoMensual(montoTotal, numeroCuotas, tasaInteres, moneda) {
+        const interesMensual = tasaInteres / 100 / 12;
+        const cuotaMensual = (montoTotal * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroCuotas));
+
+        return moneda === 'USD' ? cuotaMensual : fx(cuotaMensual).from('USD').to(moneda);
     },
     
 
@@ -387,6 +357,10 @@ if (typeof calculadora === 'undefined') {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    fx.settings = { from: 'USD', to: 'EUR' };
+    fx.base = 'USD';
+    fx.rates = { EUR: 0.85, GBP: 0.73 };
+
     calculadora.init();
 });
 }
