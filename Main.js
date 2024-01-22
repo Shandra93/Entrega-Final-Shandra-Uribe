@@ -251,6 +251,8 @@ const calculadora = {
     seleccionarProducto(event) {
         if (event.target.closest('.producto')) {
             const productoSeleccionado = event.target.closest('.producto').dataset.producto;
+            this.productoSelector.value = productoSeleccionado;
+            this.actualizarMontoTotal();
 
             document.querySelectorAll('.producto').forEach(producto => {
                 producto.classList.remove('seleccionado');
