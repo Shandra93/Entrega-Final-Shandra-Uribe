@@ -228,9 +228,6 @@ body {
     margin-bottom: 10px;
 }
 
-#agradecimientoDiv {
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+.seleccionado {
+    border: 2px solid #007BFF;
 }
