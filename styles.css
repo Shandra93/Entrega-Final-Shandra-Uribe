@@ -225,3 +225,25 @@ body {
     max-height: 100%;
     object-fit: cover;
 }
+
+#catalogoProductos .producto.seleccionado {
+    background-color: #f0f0f0;
+    border: 2px solid var(--primary-color);
+}
+
+#catalogoProductos .producto {
+    flex: 0 0 calc(50% - 16px);
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+#catalogoProductos .producto:hover {
+    background-color: #f0f0f0;
+}

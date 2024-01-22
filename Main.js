@@ -1,26 +1,25 @@
-const resultados = {
-    montoTotal: 0,
-    numeroCuotas: 0,
-    tasaInteres: 0,
-    cuotaMensual: 0,
-    producto: '',
-};
+if (typeof configuracionPredeterminada === 'undefined') {
+    const configuracionPredeterminada = {
+        monedaDefault: 'USD',
+    };
+}
 
-const configuracionPredeterminada = {
-    monedaDefault: 'USD',
-};
+if (typeof UI === 'undefined') {
+    const UI = {
+        mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
+        mostrarResultados: function(cuotaMensual, montoTotal, moneda, producto, numeroCuotas, tasaInteres, carrito) {
+        },
+    };
+}
 
-const UI = {
-    mostrarMensaje: mensaje => console.log('Mensaje en la interfaz:', mensaje),
-};
-
-const calculadora = {
-    inputs: [],
-    resultadoDiv: null,
-    calcularButton: null,
-    monedaSelector: null,
-    productoSelector: null,
-    registros: [],
+if (typeof calculadora === 'undefined') {
+    const calculadora = {
+        inputs: [],
+        resultadoDiv: null,
+        calcularButton: null,
+        monedaSelector: null,
+        productoSelector: null,
+        registros: [],
 
     obtenerNombreProducto(productoId) {
         switch (productoId) {
@@ -200,20 +199,21 @@ const calculadora = {
     agregarAlCarrito() {
         const productoSeleccionado = this.productoSelector.value;
         if (productoSeleccionado !== '') {
-            resultados.producto = productoSeleccionado;
-    
-            resultados.montoTotal = parseFloat(this.inputs[0].value);
-            resultados.numeroCuotas = parseInt(document.getElementById('numeroCuotas').value, 10);
-            resultados.tasaInteres = parseFloat(document.getElementById('tasaInteres').value);
-    
-            console.log('Valores recogidos:', resultados);  // Agregamos esta línea
-    
-            this.guardarRegistro();
-            this.mostrarCarrito();
-        } else {
-            alert('Por favor, selecciona un producto antes de agregar al carrito.');
-        }
-    },
+        resultados.producto = productoSeleccionado;
+        
+        resultados.montoTotal = parseFloat(this.inputs[0].value);
+        resultados.numeroCuotas = parseInt(document.getElementById('numeroCuotas').value, 10);
+        resultados.tasaInteres = parseFloat(document.getElementById('tasaInteres').value);
+        
+        console.log('Valores recogidos:', resultados); 
+
+        this.guardarRegistro();
+        this.mostrarCarrito();
+    } else {
+        alert('Por favor, selecciona un producto antes de agregar al carrito.');
+    }
+},
+
     
     guardarRegistro() {
         const nuevoRegistro = { ...resultados, fecha: new Date(), carrito: this.obtenerCarrito() };
@@ -225,17 +225,20 @@ const calculadora = {
     },
 
     mostrarCarrito() {
-        console.log('Último registro:', this.registros[this.registros.length - 1]);
         const carritoDiv = document.getElementById('carrito');
-        if (carritoDiv) {
+        const calcularButton = document.getElementById('calcularButton');
+
+        if (carritoDiv && calcularButton) {
             carritoDiv.innerHTML = '<h2>Carrito de Compras</h2>';
 
             if (this.registros.length > 0) {
                 const ultimoRegistro = this.registros[this.registros.length - 1];
                 const productoSeleccionado = this.obtenerNombreProducto(ultimoRegistro.producto);
                 carritoDiv.innerHTML += `<p>${productoSeleccionado} - ${ultimoRegistro.montoTotal.toFixed(2)} ${this.monedaSelector.value}</p>`;
+                calcularButton.disabled = false;
             } else {
                 carritoDiv.innerHTML += '<p>Carrito vacío</p>';
+                calcularButton.disabled = true;
             }
         }
     },
@@ -249,9 +252,13 @@ const calculadora = {
     },
 
     seleccionarProducto(event) {
+        const productos = document.querySelectorAll('.producto');
+        productos.forEach(producto => producto.classList.remove('seleccionado'));
+    
         if (event.target.closest('.producto')) {
-            const productoSeleccionado = event.target.closest('.producto').dataset.producto;
-            this.productoSelector.value = productoSeleccionado;
+            const productoSeleccionado = event.target.closest('.producto');
+            productoSeleccionado.classList.add('seleccionado');
+            this.productoSelector.value = productoSeleccionado.dataset.producto;
             this.actualizarMontoTotal();
         }
     },
@@ -297,15 +304,14 @@ const calculadora = {
                 this.registros = [];
                 UI.mostrarMensaje('Caché local limpiado con éxito.');
     
-                // Agregar la siguiente línea para resetear el texto de totalCarrito
                 document.getElementById('resultado').innerHTML = '';
-    
-                // También puedes llamar a la función cargarConfiguracion() aquí si es necesario
             }
         });
     },
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('load', () => {
     calculadora.init();
 });
+
+}
