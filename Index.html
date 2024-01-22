@@ -6,14 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Pagos</title>
     <link rel="stylesheet" href="./styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/money@0.2.0/money.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/money/money.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="./Main.js"></script>    
 </head>
 <body>
 
     <div id="encabezado">
         <h1> Calcula tu pago</h1>
-        <p>Selecciona tu producto para ayudarte con el plan de pagos para tu producto</p>
+        <p>Selecciona tu producto para ayudarte con el plan de pagos:</p>
     </div>
 
     <div id="container">
@@ -38,10 +41,13 @@
         </div>
 
     <div id="contenedorCalculadoraCarrito">
-        <div id="totalCarrito">
-            <h2> Total: </h2>
-            <div id="resultado"></div>
+
+        <div id="carrito">
+            <h2>Carrito de Compras</h2>
         </div>
+
+        <div id="resultado"></div>
+
 
         <div id="calculadora">
             <p id="carritoDeComprasText"> Calculadora de pagos </p>
@@ -55,7 +61,7 @@
                 <option value="EUR">EUR</option>
                 <option value="GBP">GBP</option>
             </select>
-            
+
             <label for="numeroCuotas">Número de Cuotas:</label>
             <select id="numeroCuotas">
                 <option value="3">3 Cuotas</option>
@@ -72,19 +78,12 @@
                 <option value="18"> Efectivo </option>
             </select>
 
-            <button id="calcularButton">Calcular</button>
-            <div id="resultado"></div>
+            <button id="calcularButton">Calcular Pago</button>
+            <button id="agregarAlCarritoButton">Agregar al Carrito</button>           
             <button id="limpiarCacheButton">Limpiar Caché</button>
-        </div>
+            
+        </div>        
     </div>
-
-    <div id="totalCarrito">
-        <h2> Total: </h2>
-        <div id="resultado"></div>
-    </div>
-    
-    
-
     <script src="./Main.js"></script>
 </body>
 </html>

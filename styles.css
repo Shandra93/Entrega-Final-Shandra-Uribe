@@ -57,8 +57,8 @@ body {
 }
 
 #catalogoProductos,
-#totalCarrito,
-#calculadora {
+#calculadora,
+#resultado {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -101,6 +101,11 @@ body {
 
 #calculadora #montoTotal {
     width: 94%;
+}
+
+#calcularButton:disabled {
+    background-color: #ccc; 
+    cursor: not-allowed;
 }
 
 #calculadora button:hover {
@@ -199,4 +204,36 @@ body {
     object-fit: cover;
 }
 
+#carrito {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 10px;
+    flex: 1;
+    margin: 10px;
+    max-width: 400px;
+}
 
+#carrito h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#carrito p {
+    text-align: center;
+    font-size: large;
+    color: #ff0000;
+    margin-bottom: 10px;
+}
+
+#agradecimientoDiv {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
