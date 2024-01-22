@@ -7,10 +7,7 @@
     <title>Calculadora de Pagos</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/money/money.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <script src="./Main.js"></script>    
+    <script src="https://openexchangerates.github.io/money.js/money.min.js"></script>
 </head>
 <body>
 
@@ -21,73 +18,53 @@
 
     <div id="container">
         <div id="catalogoProductos">
-            <!-- Contenedor del catálogo de productos -->
             <h2>Catálogo de Productos</h2>
-            <div class="producto" data-producto="producto1">
-                <img src="./Assets/television.avif" alt='Television 55" - LG'>
-                <p>Television 55" - LG </p>
-            </div>
-            <div class="producto" data-producto="producto2">
-                <img src="./Assets/laptop.jpg" alt='Laptop 13" - HP'>
-                <p>Laptop 13" - HP </p>
-            </div>
-            <div class="producto" data-producto="producto3">
-                <img src="./Assets/iphone.jpg" alt='Iphone 15 Pro - Apple'>
-                <p>Iphone 15 Pro - Apple </p>
-            </div>
-            <div class="producto" data-producto="producto4">
-                <img src="./Assets/macbook.jpg" alt='MacBook Pro'>
-                <p>MacBook Pro - Apple </p>
-            </div>
         </div>
 
-    <div id="contenedorCalculadoraCarrito">
-        <div id="totalCarrito">
-            <h2> El total va a ser: </h2>
-            <div id="resultado"></div>
+        <div id="contenedorCalculadoraCarrito">
+            <div id="carrito">
+                <h2>Carrito de Compras</h2>
+                <div id="productosCarrito"></div>
+            </div>
 
+            <div id="resultado">                
+            </div>
+
+            <div id="calculadora">
+                <p id="carritoDeComprasText"> Calculadora de pagos </p>
+
+                <label for="montoTotal" style="display: none;"></label>
+                <p id="montoTotal" style="display: none;"></p>
+
+                <label for="moneda">Moneda:</label>
+                <select id="moneda">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                </select>
+
+                <label for="numeroCuotas">Número de Cuotas:</label>
+                <select id="numeroCuotas">
+                    <option value="3">3 Cuotas</option>
+                    <option value="6">6 Cuotas</option>
+                    <option value="9">9 Cuotas</option>
+                    <option value="12">12 Cuotas</option>
+                    <option value="15">15 Cuotas</option>
+                </select>
+
+                <label for="tasaInteres">Método de pago:</label>
+                <select id="tasaInteres">
+                    <option value="10"> Credito </option>
+                    <option value="15"> Debito </option>
+                    <option value="18"> Efectivo </option>
+                </select>
+
+                <button id="calcularButton" disabled>Calcular Pago</button>
+                <button id="agregarAlCarritoButton">Agregar al Carrito</button>
+                
+            </div>
         </div>
-
-        <div id="calculadora">
-            <p id="carritoDeComprasText"> Carrito de compras </p>
-            <label for="moneda">Moneda:</label>
-            <select id="moneda">
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-            </select>
-
-            <label for="montoTotal">Monto Total:</label>
-            <input type="number" id="montoTotal" disabled>
-
-
-            <label for="montoTotal">Monto Total:</label>
-            <input type="number" id="montoTotal" disabled>
-
-            <label for="numeroCuotas">Número de Cuotas:</label>
-            <select id="numeroCuotas">
-                <option value="3">3 Cuotas</option>
-                <option value="6">6 Cuotas</option>
-                <option value="9">9 Cuotas</option>
-                <option value="12">12 Cuotas</option>
-                <option value="15">15 Cuotas</option>
-            </select>
-
-            <label for="tasaInteres">Tasa de Interés Anual (%):</label>
-            <select id="tasaInteres">
-                <option value="10"> Credito </option>
-                <option value="12"> Debito </option>
-                <option value="15"> Efectivo </option>
-            </select>
-
-            <button id="calcularButton" disabled>Calcular Pago</button>
-            <button id="agregarAlCarritoButton">Agregar al Carrito</button>           
-<!--             <button id="limpiarCacheButton">Limpiar Caché</button>
- -->            
-        </div>        
     </div>
-    
-    
 
     <script src="./Main.js"></script>
 </body>
