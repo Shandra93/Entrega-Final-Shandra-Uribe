@@ -34,41 +34,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const carrito = document.getElementById('productosCarrito');
     const calcularButton = document.getElementById('calcularButton');
     const agregarAlCarritoButton = document.getElementById('agregarAlCarritoButton');
-    const limpiarCacheButton = document.getElementById('limpiarCacheButton');
     const resultadoDiv = document.getElementById('resultado');
 
     let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
 
-    limpiarCacheButton.style.display = productosCarrito.length > 0 ? 'block' : 'none';
+    renderizarCarrito();
 
-    calcularButton.disabled = true;
+    if (productosCarrito.length > 0) {
+        calcularButton.disabled = false;
+    }
 
     agregarAlCarritoButton.addEventListener('click', function () {
         const productoSeleccionado = productos.find(producto => producto.nombre === getProductoSeleccionado());
 
         if (productoSeleccionado) {
-            const index = productosCarrito.findIndex(item => item.nombre === productoSeleccionado.nombre);
+            const productoEnCarritoIndex = productosCarrito.findIndex(p => p.nombre === productoSeleccionado.nombre);
 
-            if (index !== -1) {
-                productosCarrito[index].cantidad++;
+            if (productoEnCarritoIndex !== -1) {
+                productosCarrito[productoEnCarritoIndex].cantidad++;
             } else {
                 productosCarrito.push({ ...productoSeleccionado, cantidad: 1 });
             }
 
             localStorage.setItem('productosCarrito', JSON.stringify(productosCarrito));
-            console.log('Se agregaron productos a la memoria')
-            console.log(productosCarrito)
 
             renderizarCarrito();
             calcularButton.disabled = false;
-
-            document.getElementById('resultado').removeAttribute('disabled');
-
-            limpiarCacheButton.style.display = 'block';
         }
     });
-
-    limpiarCacheButton.addEventListener('click', limpiarCacheLocal);
 
     catalogoProductos.addEventListener('click', function (event) {
         const productoSeleccionado = event.target.closest('.producto');
@@ -102,12 +95,11 @@ document.addEventListener('DOMContentLoaded', function () {
             mostrarBotonLimpiarCache();
         } else {
             resultadoDiv.innerHTML = 'No hay productos en el carrito para calcular el pago.';
-            document.getElementById('resultado').setAttribute('disabled', true);
         }
     });
 
     function calcularMontoTotalCarrito() {
-        return productosCarrito.reduce((total, producto) => total + (producto.precio * producto.cantidad), 0);
+        return productosCarrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
     }
 
     function mostrarBotonLimpiarCache() {
@@ -159,19 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 productosCarrito = [];
                 renderizarCarrito();
                 resultadoDiv.innerHTML = '';
-                if (calcularButton) {
-                    calcularButton.disabled = true;
-                }
-
-                limpiarCacheButton.style.display = 'none';
-
-                if (productosCarrito.length > 0) {
-                    calcularButton.disabled = false;
-                    document.getElementById('resultado').removeAttribute('disabled');
-                } else {
-                    calcularButton.disabled = true;
-                    document.getElementById('resultado').setAttribute('disabled', true);
-                }
+                calcularButton.disabled = true;
 
                 Swal.fire('Caché local limpiado con éxito.', '', 'success');
             }
@@ -194,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
             imagen.alt = producto.nombre;
 
             const parrafo = document.createElement('p');
-            parrafo.textContent = `${producto.nombre} - Precio: ${producto.precio} ${producto.moneda}`;
+            parrafo.textContent = `${producto.nombre} - Precio: ${producto.precio}`;
 
             nuevoProducto.appendChild(imagen);
             nuevoProducto.appendChild(parrafo);
@@ -208,11 +188,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         productosCarrito.forEach(producto => {
             const nuevoElemento = document.createElement('p');
-            nuevoElemento.textContent = `${producto.nombre} - Precio: ${producto.precio} ${producto.moneda} x ${producto.cantidad}`;
+            nuevoElemento.textContent = `${producto.nombre} - Precio: ${producto.precio * producto.cantidad} ${producto.moneda} x ${producto.cantidad}`;
             carrito.appendChild(nuevoElemento);
         });
     }
 
     renderizarCatalogo();
-    renderizarCarrito();
 });
