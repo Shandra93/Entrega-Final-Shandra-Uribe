@@ -1,36 +1,40 @@
+// productoSeleccionado - local storage  - array productos seleccionados
+// sumar arreglo productos seleccionados y calcular array
+// calculadora tiene que determinar el currency - evento para cambiar el currency a la seleccionada - 
+// recalcular el precio de cada precio del catalogo y el carrito segun seleccion
+// producto seleccionado = local storage array productosCarrito
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const productos = [
         {
             nombre: 'Television 55" - LG',
             imagen: './Assets/television.avif',
-            precio: 1000,
-            moneda: 'USD'
+            precio: 1000
         },
         {
             nombre: 'Laptop 13" - HP',
             imagen: './Assets/laptop.jpg',
-            precio: 800,
-            moneda: 'USD'
+            precio: 800
         },
         {
             nombre: 'Iphone 15 Pro - Apple',
             imagen: './Assets/iphone.jpg',
-            precio: 1200,
-            moneda: 'USD'
+            precio: 1200
         },
         {
             nombre: 'MacBook Pro - Apple',
             imagen: './Assets/macbook.jpg',
-            precio: 1500,
-            moneda: 'USD'
+            precio: 1500
         }
     ];
 
     const catalogoProductos = document.getElementById('catalogoProductos');
-    const carrito = document.getElementById('carrito');
+    const carrito = document.getElementById('productosCarrito');
     const calcularButton = document.getElementById('calcularButton');
     const agregarAlCarritoButton = document.getElementById('agregarAlCarritoButton');
     const resultadoDiv = document.getElementById('resultado');
+/*     let productosCarrito = []; */
 
     calcularButton.disabled = true;
 
@@ -39,11 +43,12 @@ document.addEventListener('DOMContentLoaded', function () {
     agregarAlCarritoButton.addEventListener('click', function () {
         const productoSeleccionado = productos.find(producto => producto.nombre === getProductoSeleccionado());
 
+
+
         if (productoSeleccionado && !existeEnCarrito(productoSeleccionado.nombre)) {
             const nuevoElemento = document.createElement('div');
             nuevoElemento.textContent = `${productoSeleccionado.nombre} - Precio: ${productoSeleccionado.precio} ${productoSeleccionado.moneda}`;
             carrito.appendChild(nuevoElemento);
-
             calcularButton.disabled = false;
         }
     });
@@ -157,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             imagen.alt = producto.nombre;
 
             const parrafo = document.createElement('p');
-            parrafo.textContent = `${producto.nombre} - Precio: ${producto.precio} ${producto.moneda}`;
+            parrafo.textContent = `${producto.nombre} - Precio: ${producto.precio}`;
 
             nuevoProducto.appendChild(imagen);
             nuevoProducto.appendChild(parrafo);
