@@ -35,16 +35,20 @@ document.addEventListener('DOMContentLoaded', function () {
     let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
 
     renderizarCarrito();
-    console.log(productosCarrito);
+
 
     if (productosCarrito.length > 0) {
+        console.log(`Se guardo correctamente el registro en local storage`);
+        console.log(productosCarrito);
+
         calcularButton.disabled = false;
     }
 
     agregarAlCarritoButton.addEventListener('click', function () {
-        const productoSeleccionado = productos.find(producto => producto.nombre === getProductoSeleccionado());
+    const productoSeleccionado = productos.find(producto => producto.nombre === getProductoSeleccionado());
 
-        if (productoSeleccionado && !existeEnCarrito(productoSeleccionado.nombre)) {
+    if (productoSeleccionado) {
+        if (!existeEnCarrito(productoSeleccionado.nombre)) {
             productosCarrito.push(productoSeleccionado);
 
             localStorage.setItem('productosCarrito', JSON.stringify(productosCarrito));
@@ -53,7 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             calcularButton.disabled = false;
         }
-    });
+    }
+});
 
     catalogoProductos.addEventListener('click', function (event) {
         const productoSeleccionado = event.target.closest('.producto');
