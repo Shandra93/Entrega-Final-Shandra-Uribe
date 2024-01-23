@@ -1,0 +1,5 @@
+// productoSeleccionado - local storage  - array productos seleccionados
+// sumar arreglo productos seleccionados y calcular array
+// calculadora tiene que determinar el currency - evento para cambiar el currency a la seleccionada - 
+// recalcular el precio de cada precio del catalogo y el carrito segun seleccion
+// producto seleccionado = local storage array productosCarrito
