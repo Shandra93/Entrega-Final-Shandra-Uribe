@@ -35,8 +35,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const calcularButton = document.getElementById('calcularButton');
     const agregarAlCarritoButton = document.getElementById('agregarAlCarritoButton');
     const resultadoDiv = document.getElementById('resultado');
+    const monedaSelect = document.getElementById('moneda');
 
     let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
+    
+    console.log('Registro guardado')
+    console.log(productosCarrito)
 
     renderizarCarrito();
 
@@ -57,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             localStorage.setItem('productosCarrito', JSON.stringify(productosCarrito));
+            console.log('Productos registrados en memoria');
+            console.log(productosCarrito);
 
             renderizarCarrito();
             calcularButton.disabled = false;
@@ -73,6 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             productoSeleccionado.classList.add('seleccionado');
         }
+    });
+
+    monedaSelect.addEventListener('change', function () {
+        renderizarCatalogo();
+        calcularButton.click();
     });
 
     calcularButton.addEventListener('click', function () {
@@ -96,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             resultadoDiv.innerHTML = 'No hay productos en el carrito para calcular el pago.';
         }
+    });
+
+    const limpiarCarritoButton = document.getElementById('limpiarCarritoButton');
+    limpiarCarritoButton.addEventListener('click', function () {
+        limpiarCarrito();
     });
 
     function calcularMontoTotalCarrito() {
@@ -158,12 +174,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function limpiarCarrito() {
+        productosCarrito = [];
+        localStorage.setItem('productosCarrito', JSON.stringify(productosCarrito));
+        renderizarCarrito();
+        resultadoDiv.innerHTML = '';
+        calcularButton.disabled = true;
+    }
+
     function getProductoSeleccionado() {
         const productoSeleccionado = catalogoProductos.querySelector('.seleccionado');
         return productoSeleccionado ? productoSeleccionado.dataset.producto : null;
     }
 
     function renderizarCatalogo() {
+        catalogoProductos.innerHTML = '';
+
         productos.forEach(producto => {
             const nuevoProducto = document.createElement('div');
             nuevoProducto.classList.add('producto');
@@ -173,14 +199,22 @@ document.addEventListener('DOMContentLoaded', function () {
             imagen.src = producto.imagen;
             imagen.alt = producto.nombre;
 
+            const precioEnMoneda = convertirPrecio(producto.precio, monedaSelect.value);
+
             const parrafo = document.createElement('p');
-            parrafo.textContent = `${producto.nombre} - Precio: ${producto.precio}`;
+            parrafo.textContent = `${producto.nombre} - Precio: ${precioEnMoneda.toFixed(2)} ${monedaSelect.value}`;
 
             nuevoProducto.appendChild(imagen);
             nuevoProducto.appendChild(parrafo);
 
             catalogoProductos.appendChild(nuevoProducto);
         });
+    }
+
+    function convertirPrecio(precio, monedaDestino) {
+        const monedaBase = 'USD';
+        const conversionRate = obtenerTasaDeCambio(monedaDestino);
+        return precio * conversionRate;
     }
 
     function renderizarCarrito() {

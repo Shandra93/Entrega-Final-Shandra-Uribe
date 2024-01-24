@@ -276,6 +276,15 @@ body {
     border-radius: 10px;
 }
 
+#limpiarCarritoButton {
+    background-color: #dc3545;
+    margin-top: 10px;
+}
+
+#limpiarCarritoButton:hover {
+    background-color: #bd2130;
+    color: #fff;
+}   
 
 
 
