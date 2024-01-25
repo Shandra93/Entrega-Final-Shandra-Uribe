@@ -27,6 +27,34 @@ document.addEventListener('DOMContentLoaded', function () {
             precio: 1500,
             moneda: 'USD',
             cantidad: 1
+        },
+        {
+            nombre: 'MacBook Air - Apple',
+            imagen: './Assets/macbook.jpg',
+            precio: 1350,
+            moneda: 'USD',
+            cantidad: 1
+        },
+        {
+            nombre: 'MAC Pro - Apple',
+            imagen: './Assets/Mac_pro.jpg',
+            precio: 5800,
+            moneda: 'USD',
+            cantidad: 1
+        },
+        {
+            nombre: 'Razer Blade - Razer',
+            imagen: './Assets/razer_blade.jpg',
+            precio: 3500,
+            moneda: 'USD',
+            cantidad: 1
+        },
+        {
+            nombre: 'Golden Apple - Apple',
+            imagen: './Assets/golden_apple.avif',
+            precio: 5000,
+            moneda: 'USD',
+            cantidad: 1
         }
     ];
 
@@ -38,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const monedaSelect = document.getElementById('moneda');
 
     let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
-    
+
     console.log('Registro guardado')
     console.log(productosCarrito)
 
@@ -61,8 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             localStorage.setItem('productosCarrito', JSON.stringify(productosCarrito));
-            console.log('Productos registrados en memoria');
-            console.log(productosCarrito);
+
+            mostrarNotificacion(`${productoSeleccionado.nombre} ha sido agregado al carrito`);
 
             renderizarCarrito();
             calcularButton.disabled = false;
@@ -97,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const conversionRate = obtenerTasaDeCambio(monedaSeleccionada);
                 const montoEnMoneda = montoTotalCarrito * conversionRate;
                 resultadoDiv.innerHTML = `Monto total en ${monedaSeleccionada}: ${montoEnMoneda.toFixed(2)} ${monedaSeleccionada} (Tasa de cambio: 1 USD = ${conversionRate.toFixed(2)} ${monedaSeleccionada})`;
+                localStorage.setItem('resultadoDivContenido', resultadoDiv.innerHTML);
                 calcularCuotas(montoEnMoneda, numeroCuotas, tasaInteres);
             } else {
                 resultadoDiv.innerHTML = `Monto total en ${monedaSeleccionada}: ${montoTotalCarrito.toFixed(2)} ${monedaSeleccionada}`;
@@ -185,6 +214,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function getProductoSeleccionado() {
         const productoSeleccionado = catalogoProductos.querySelector('.seleccionado');
         return productoSeleccionado ? productoSeleccionado.dataset.producto : null;
+    }
+
+    function mostrarNotificacion(mensaje) {
+        Toastify({
+            text: mensaje,
+            duration: 3000,
+            close: true,
+            gravity: 'top', 
+            position: 'right', 
+            stylebackground: '#4285f4', 
+            stopOnFocus: true,
+        }).showToast();
     }
 
     function renderizarCatalogo() {
