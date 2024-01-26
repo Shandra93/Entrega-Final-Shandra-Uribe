@@ -55,6 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
             precio: 5000,
             moneda: 'USD',
             cantidad: 1
+        },
+        {
+            nombre: 'Silla Gamer - Cougar',
+            imagen: './Assets/silla.jpg',
+            precio: 2480,
+            moneda: 'USD',
+            cantidad: 1
         }
     ];
 
@@ -64,11 +71,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const agregarAlCarritoButton = document.getElementById('agregarAlCarritoButton');
     const resultadoDiv = document.getElementById('resultado');
     const monedaSelect = document.getElementById('moneda');
+    const tiempoCarritoElement = document.getElementById('tiempoCarrito');
 
     let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
+    let tiempoEnCarrito = 60;
+    let intervaloTiempoCarrito;
 
-    console.log('Registro guardado')
-    console.log(productosCarrito)
+    console.log('Registro guardado');
+    console.log(productosCarrito);
 
     renderizarCarrito();
 
@@ -124,11 +134,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (monedaSeleccionada !== 'USD') {
                 const conversionRate = obtenerTasaDeCambio(monedaSeleccionada);
                 const montoEnMoneda = montoTotalCarrito * conversionRate;
-                resultadoDiv.innerHTML = `Monto total en ${monedaSeleccionada}: ${montoEnMoneda.toFixed(2)} ${monedaSeleccionada} (Tasa de cambio: 1 USD = ${conversionRate.toFixed(2)} ${monedaSeleccionada})`;
+                resultadoDiv.innerHTML = `<p>Monto total en ${monedaSeleccionada}: ${montoEnMoneda.toFixed(2)} ${monedaSeleccionada} (Tasa de cambio: 1 USD = ${conversionRate.toFixed(2)} ${monedaSeleccionada})</p>`;
                 localStorage.setItem('resultadoDivContenido', resultadoDiv.innerHTML);
                 calcularCuotas(montoEnMoneda, numeroCuotas, tasaInteres);
             } else {
-                resultadoDiv.innerHTML = `Monto total en ${monedaSeleccionada}: ${montoTotalCarrito.toFixed(2)} ${monedaSeleccionada}`;
+                resultadoDiv.innerHTML = `<p>Monto total en ${monedaSeleccionada}: ${montoTotalCarrito.toFixed(2)} ${monedaSeleccionada}</p>`;
                 calcularCuotas(montoTotalCarrito, numeroCuotas, tasaInteres);
             }
 
@@ -140,7 +150,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const limpiarCarritoButton = document.getElementById('limpiarCarritoButton');
     limpiarCarritoButton.addEventListener('click', function () {
+        clearInterval(intervaloTiempoCarrito);
+        tiempoEnCarrito = 60;
+        actualizarTiempoCarrito(); 
         limpiarCarrito();
+        intervaloTiempoCarrito = setInterval(actualizarTiempoCarrito, 1000); 
+    });
+
+    function actualizarTiempoCarrito() {
+        tiempoEnCarrito--;
+
+        if (tiempoEnCarrito >= 0) {
+            const minutos = Math.floor(tiempoEnCarrito / 60);
+            const segundos = tiempoEnCarrito % 60;
+            tiempoCarritoElement.textContent = `Tiempo en el carrito: ${minutos} min ${segundos} seg`;
+        } else {
+            limpiarCarrito();
+            clearInterval(intervaloTiempoCarrito);
+            tiempoCarritoElement.textContent = 'Tiempo en el carrito: Expirado';
+
+            setTimeout(function () {
+                location.reload();
+            }, 1000);
+        }
+    }
+
+    document.addEventListener('click', function () {
+        tiempoEnCarrito = 60;
+    });
+
+    limpiarCarritoButton.addEventListener('click', function () {
+        clearInterval(intervaloTiempoCarrito);
     });
 
     function calcularMontoTotalCarrito() {
@@ -159,9 +199,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function calcularCuotas(montoTotal, numeroCuotas, tasaInteres) {
         const tasaInteresDecimal = tasaInteres / 100;
         const cuotaMensual = (montoTotal * (1 + tasaInteresDecimal)) / numeroCuotas;
-        resultadoDiv.innerHTML += `<br/>Número de Cuotas: ${numeroCuotas}`;
-        resultadoDiv.innerHTML += `<br/>Tasa de Interés: ${tasaInteres}%`;
-        resultadoDiv.innerHTML += `<br/>Cuota Mensual: ${cuotaMensual.toFixed(2)}`;
+        resultadoDiv.innerHTML += `<p>Número de Cuotas: ${numeroCuotas}</p>`;
+        resultadoDiv.innerHTML += `<p>Tasa de Interés: ${tasaInteres}%</p>`;
+        resultadoDiv.innerHTML += `<p>Cuota Mensual: ${cuotaMensual.toFixed(2)}</p>`;
         resultadoDiv.innerHTML += `<br/>`;
     }
 
