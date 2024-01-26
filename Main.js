@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    document.addEventListener('DOMContentLoaded', function () {
+        obtenerFechaDeAPI();
+    });
+
     const productos = [
         {
             nombre: 'Television 55" - LG',
@@ -72,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const resultadoDiv = document.getElementById('resultado');
     const monedaSelect = document.getElementById('moneda');
     const tiempoCarritoElement = document.getElementById('tiempoCarrito');
+    const fechaActualElement = document.getElementById('fechaActual');
 
     let productosCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
     let tiempoEnCarrito = 60;
@@ -82,11 +88,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     renderizarCarrito();
 
+    if (fechaActualElement) {
+        mostrarFechaActual();
+    }
+
     if (productosCarrito.length > 0) {
         calcularButton.disabled = false;
     }
 
     agregarAlCarritoButton.addEventListener('click', function () {
+        reiniciarTemporizador();
+        
         const productoSeleccionado = productos.find(producto => producto.nombre === getProductoSeleccionado());
 
         if (productoSeleccionado) {
@@ -156,6 +168,56 @@ document.addEventListener('DOMContentLoaded', function () {
         limpiarCarrito();
         intervaloTiempoCarrito = setInterval(actualizarTiempoCarrito, 1000); 
     });
+
+    function mostrarFechaActual() {
+        const fechaActual = new Date();
+        const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const fechaFormateada = fechaActual.toLocaleDateString('es-ES', opcionesFecha);
+        fechaActualElement.textContent = `Fecha actual: ${fechaFormateada}`;
+    }
+
+    mostrarFechaActual();
+
+
+    function reiniciarTemporizador() {
+        tiempoEnCarrito = 60;
+
+        clearInterval(intervaloTiempoCarrito);
+
+        intervaloTiempoCarrito = setInterval(actualizarTiempoCarrito, 1000);
+    }
+
+    
+
+    function actualizarTiempoCarrito() {
+        tiempoEnCarrito--;
+
+        if (tiempoEnCarrito >= 0) {
+            const minutos = Math.floor(tiempoEnCarrito / 60);
+            const segundos = tiempoEnCarrito % 60;
+            tiempoCarritoElement.textContent = `Tiempo en el carrito: ${minutos} min ${segundos} seg`;
+        } else {
+            limpiarCarrito();
+            clearInterval(intervaloTiempoCarrito);
+            tiempoCarritoElement.textContent = 'Tiempo en el carrito: Expirado';
+
+            setTimeout(function () {
+                location.reload();
+            }, 1000);
+        }
+    }
+
+    function obtenerFechaDeAPI() {
+        fetch('http://worldtimeapi.org/api/ip')
+            .then(response => response.json())
+            .then(data => {
+                const fecha = new Date(data.utc_datetime);
+                mostrarFecha(fecha);
+            })
+            .catch(error => {
+                console.error('Error al obtener la fecha desde la API:', error);
+            });
+    }
 
     function actualizarTiempoCarrito() {
         tiempoEnCarrito--;
